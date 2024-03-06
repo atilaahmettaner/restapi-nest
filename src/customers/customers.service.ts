@@ -1,7 +1,7 @@
 import CreateCustomerDto from './dto/CreateCustomerDto';
 import { Customer } from './customer.entity';
 import { Repository } from 'typeorm';
-import { Get, Injectable, Post } from '@nestjs/common';
+import { Body, Get, Injectable, Post } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 //import { CustomersController } from './customers.controller';
 @Injectable()
@@ -17,6 +17,10 @@ export class CustomersService {
   getAllCustomers(): Promise<Customer[]> {
     return this.customersRepository.find({});
   }
+  @Get('/:id')
+  getCustomerById(id: number): Promise<Customer> {
+    return this.customersRepository.findOne({ where: { id } });
+  }
   @Post()
   async createCustomer(customer: CreateCustomerDto): Promise<Customer> {
     const newCustomer = new Customer();
@@ -28,6 +32,14 @@ export class CustomersService {
     newCustomer.email = customer.email;
     newCustomer.telephone = customer.telephone;
 
+    return this.customersRepository.save(customer);
+  }
+
+  async filterCustomersByName(firstName: string): Promise<Customer[]> {
+    return this.customersRepository.find({ where: { firstName } });
+  }
+  @Post()
+  updateCustomer(@Body() customer: CreateCustomerDto): Promise<Customer> {
     return this.customersRepository.save(customer);
   }
 }
