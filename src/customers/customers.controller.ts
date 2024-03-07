@@ -1,5 +1,5 @@
 import { Customer } from './customer.entity';
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/CreateCustomerDto';
 @Controller('customers')
@@ -15,8 +15,10 @@ export class CustomersController {
     return this.customersService.createCustomer(customer);
   }
   @Get('/search')
-  filterCustomersByName(@Query('firstName') name: string): Promise<Customer[]> {
-    return this.customersService.filterCustomersByName(name);
+  filterCustomersByName(
+    @Query('firstName') firstName: string,
+  ): Promise<Customer[]> {
+    return this.customersService.filterCustomersByName(firstName);
   }
   //can you write a function that will update a customer
   @Post()
@@ -25,7 +27,11 @@ export class CustomersController {
   }
 
   @Get(':id')
-  getCustomerById(id: number): Promise<Customer | undefined> {
+  getCustomerById(@Param('id') id: number): Promise<Customer | undefined> {
     return this.customersService.getCustomerById(id);
+  }
+  @Get('/test')
+  testRoute(): string {
+    return 'Bu bir test mesajıdır.';
   }
 }

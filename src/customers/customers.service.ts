@@ -17,10 +17,10 @@ export class CustomersService {
   getAllCustomers(): Promise<Customer[]> {
     return this.customersRepository.find({});
   }
-  @Get('/:id')
-  getCustomerById(id: number): Promise<Customer> {
+  getCustomerById(id: number): Promise<Customer | undefined> {
     return this.customersRepository.findOne({ where: { id } });
   }
+
   @Post()
   async createCustomer(customer: CreateCustomerDto): Promise<Customer> {
     const newCustomer = new Customer();
@@ -34,12 +34,15 @@ export class CustomersService {
 
     return this.customersRepository.save(customer);
   }
-
-  async filterCustomersByName(firstName: string): Promise<Customer[]> {
+  @Get('/search')
+  filterCustomersByName(firstName: string): Promise<Customer[]> {
     return this.customersRepository.find({ where: { firstName } });
   }
   @Post()
   updateCustomer(@Body() customer: CreateCustomerDto): Promise<Customer> {
     return this.customersRepository.save(customer);
+  }
+  test(str: string) {
+    return str;
   }
 }
