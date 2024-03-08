@@ -20,7 +20,6 @@ export class CustomersController {
   ): Promise<Customer[]> {
     return this.customersService.filterCustomersByName(firstName);
   }
-  //can you write a function that will update a customer
   @Post()
   updateCustomer(@Body() customer: CreateCustomerDto): Promise<Customer> {
     return this.customersService.updateCustomer(customer);

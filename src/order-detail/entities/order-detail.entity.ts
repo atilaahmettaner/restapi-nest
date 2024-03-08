@@ -1,6 +1,6 @@
-import { Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Order } from '../../orders/entities/order.entity';
-
+@Entity()
 export class OrderDetail {
   @PrimaryGeneratedColumn()
   id: number;

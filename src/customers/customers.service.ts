@@ -22,17 +22,19 @@ export class CustomersService {
   }
 
   @Post()
-  async createCustomer(customer: CreateCustomerDto): Promise<Customer> {
+  async createCustomer(
+    createCustomerDto: CreateCustomerDto,
+  ): Promise<Customer> {
     const newCustomer = new Customer();
 
-    newCustomer.firstName = customer.firstName;
-    newCustomer.lastName = customer.lastName;
-    newCustomer.isActive = customer.isActive;
-    newCustomer.address = customer.address;
-    newCustomer.email = customer.email;
-    newCustomer.telephone = customer.telephone;
+    newCustomer.firstName = createCustomerDto.firstName;
+    newCustomer.lastName = createCustomerDto.lastName;
+    newCustomer.isActive = createCustomerDto.isActive;
+    newCustomer.address = createCustomerDto.address;
+    newCustomer.email = createCustomerDto.email;
+    newCustomer.telephone = createCustomerDto.telephone;
 
-    return this.customersRepository.save(customer);
+    return this.customersRepository.save(createCustomerDto);
   }
   @Get('/search')
   filterCustomersByName(firstName: string): Promise<Customer[]> {

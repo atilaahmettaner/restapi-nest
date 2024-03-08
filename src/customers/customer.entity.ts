@@ -4,6 +4,7 @@ import { Order } from '../orders/entities/order.entity';
 export class Customer {
   @PrimaryGeneratedColumn()
   id: number;
+
   @OneToMany(() => Order, (order) => order.customer)
   orders: Order[];
   @Column()

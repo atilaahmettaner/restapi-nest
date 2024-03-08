@@ -6,6 +6,9 @@ import { Customer } from './customers/customer.entity';
 import { OrdersModule } from './orders/orders.module';
 import { OrderDetailModule } from './order-detail/order-detail.module';
 import { ProductsModule } from './products/products.module';
+import { OrderDetail } from './order-detail/entities/order-detail.entity';
+import { Order } from './orders/entities/order.entity';
+import { Product } from './products/entities/product.entity';
 
 @Module({
   controllers: [CustomersController],
@@ -18,14 +21,14 @@ import { ProductsModule } from './products/products.module';
       username: 'postgres',
       password: 'postgres',
       database: 'customer',
-      entities: [Customer],
+      entities: [Customer, Order, OrderDetail, Product],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([Customer]),
+    TypeOrmModule.forFeature([Customer, Order, OrderDetail, Product]),
     OrdersModule,
     OrderDetailModule,
     ProductsModule,
   ],
-  exports: [CustomersService],
+  exports: [CustomersService, OrdersModule, OrderDetailModule, ProductsModule],
 })
 export class AppModule {}
