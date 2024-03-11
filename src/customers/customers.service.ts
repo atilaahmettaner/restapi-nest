@@ -40,6 +40,7 @@ export class CustomersService {
   filterCustomersByName(firstName: string): Promise<Customer[]> {
     return this.customersRepository.find({ where: { firstName } });
   }
+
   @Post()
   updateCustomer(@Body() customer: CreateCustomerDto): Promise<Customer> {
     return this.customersRepository.save(customer);

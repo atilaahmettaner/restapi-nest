@@ -2,6 +2,7 @@ import { Customer } from './customer.entity';
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/CreateCustomerDto';
+//localhost:3000/customers/
 @Controller('customers')
 export class CustomersController {
   constructor(private customersService: CustomersService) {}

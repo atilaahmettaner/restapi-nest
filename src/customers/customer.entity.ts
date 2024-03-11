@@ -7,6 +7,7 @@ export class Customer {
 
   @OneToMany(() => Order, (order) => order.customer)
   orders: Order[];
+
   @Column()
   firstName: string;
 
