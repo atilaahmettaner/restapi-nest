@@ -12,8 +12,10 @@ $ npm install
 ```
 
 ## Running the app
-docker-compose up  --build
 ```bash
+$ docker-compose up  --build
+```
+
 # development
 $ npm run start
 
