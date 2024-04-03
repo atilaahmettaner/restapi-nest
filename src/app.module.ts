@@ -9,11 +9,46 @@ import { ProductsModule } from './products/products.module';
 import { OrderDetail } from './order-detail/entities/order-detail.entity';
 import { Order } from './orders/entities/order.entity';
 import { Product } from './products/entities/product.entity';
-
+import {
+  KeycloakConnectModule,
+  ResourceGuard,
+  RoleGuard,
+  AuthGuard,
+} from 'nest-keycloak-connect';
+import { APP_GUARD } from '@nestjs/core';
 @Module({
   controllers: [CustomersController],
-  providers: [CustomersService],
+  providers: [
+    CustomersService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    // This adds a global level resource guard, which is permissive.
+    // Only controllers annotated with @Resource and
+    // methods with @Scopes
+    // are handled by this guard.
+    {
+      provide: APP_GUARD,
+      useClass: ResourceGuard,
+    },
+    // New in 1.1.0
+    // This adds a global level role guard, which is permissive.
+    // Used by `@Roles` decorator with the
+    // optional `@AllowAnyRole` decorator for allowing any
+    // specified role passed.
+    {
+      provide: APP_GUARD,
+      useClass: RoleGuard,
+    },
+  ],
   imports: [
+    KeycloakConnectModule.register({
+      authServerUrl: 'http://localhost:8080/auth',
+      realm: 'Demo-Realm',
+      clientId: 'nest-app',
+      secret: '83790b4f-48cd-4b6c-ac60-451a918be4b9',
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'postgres',
