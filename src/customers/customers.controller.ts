@@ -2,11 +2,15 @@ import { Customer } from './customer.entity';
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/CreateCustomerDto';
+import { Roles } from 'nest-keycloak-connect';
+import { ApiBearerAuth } from '@nestjs/swagger';
 //localhost:3000/customers/
 @Controller('customers')
 export class CustomersController {
   constructor(private customersService: CustomersService) {}
+
   @Get()
+
   getAllCustomers(): Promise<Array<Customer>> {
     return this.customersService.getAllCustomers();
   }
@@ -17,6 +21,12 @@ export class CustomersController {
   }
   @Get('/search')
   filterCustomersByName(
+    @Query('firstName') firstName: string,
+  ): Promise<Customer[]> {
+    return this.customersService.filterCustomersByName(firstName);
+  }
+  @Get('/search2')
+  filterCustomersByName2(
     @Query('firstName') firstName: string,
   ): Promise<Customer[]> {
     return this.customersService.filterCustomersByName(firstName);

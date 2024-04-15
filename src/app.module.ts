@@ -45,9 +45,9 @@ import { APP_GUARD } from '@nestjs/core';
   imports: [
     KeycloakConnectModule.register({
       authServerUrl: 'http://localhost:8080/auth',
-      realm: 'Demo-Realm',
+      realm: 'Customers',
       clientId: 'nest-app',
-      secret: '83790b4f-48cd-4b6c-ac60-451a918be4b9',
+      secret: '2lEBEQRpw7SkmhBdEpVl8d6jP4X9gn88',
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',

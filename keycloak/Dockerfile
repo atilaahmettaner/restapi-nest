@@ -22,3 +22,4 @@ ENV KC_DB_USERNAME=customer
 ENV KC_DB_PASSWORD=postgres
 ENV KC_HOSTNAME=localhost
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
+
