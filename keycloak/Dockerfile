@@ -16,8 +16,8 @@ FROM quay.io/keycloak/keycloak:latest
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 
 # change these values to point to a running postgres instance
-ENV KC_DB=customer
-ENV KC_DB_URL=jdbc:postgresql://localhost:5432/customer
+ENV KC_DB=postgres
+ENV KC_DB_URL=jdbc:postgresql://postgres:5432/customer
 ENV KC_DB_USERNAME=customer
 ENV KC_DB_PASSWORD=postgres
 ENV KC_HOSTNAME=localhost

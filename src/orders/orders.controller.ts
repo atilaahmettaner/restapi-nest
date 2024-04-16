@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { AuthGuard } from 'nest-keycloak-connect';
 
 @Controller('orders')
 export class OrdersController {
@@ -21,6 +23,7 @@ export class OrdersController {
   }
 
   @Get()
+  @UseGuards(AuthGuard)
   findAll() {
     return this.ordersService.findAll();
   }
