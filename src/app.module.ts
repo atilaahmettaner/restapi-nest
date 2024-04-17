@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { CustomersController } from './customers/customers.controller';
 import { CustomersService } from './customers/customers.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -16,6 +16,8 @@ import {
   AuthGuard,
 } from 'nest-keycloak-connect';
 import { APP_GUARD } from '@nestjs/core';
+import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 @Module({
   controllers: [CustomersController],
   providers: [
@@ -43,21 +45,33 @@ import { APP_GUARD } from '@nestjs/core';
     },
   ],
   imports: [
-    KeycloakConnectModule.register({
-      authServerUrl: 'http://localhost:8080/auth',
-      realm: 'Customers',
-      clientId: 'nest-app1',
-      secret: 'DXSOfl45zhdIhW4BSL3WouOpY2SCyB0D',
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'postgres',
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'customer',
-      entities: [Customer, Order, OrderDetail, Product],
-      synchronize: true,
+    KeycloakConnectModule.registerAsync({
+      imports: [ConfigModule],
+      //add env this to .env file
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        authServerUrl: config.get('KEYCLOAK_AUTH_SERVER_URL'),
+        realm: config.get('KEYCLOAK_REALM'),
+        clientId: config.get('KEYCLOAK_CLIENT_ID'),
+        secret: config.get('KEYCLOAK_SECRET'),
+      }),
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'postgres',
+        host: config.get('DB_HOST'),
+        port: config.get<number>('DB_PORT'),
+        username: config.get('DB_USERNAME'),
+        password: config.get('DB_PASSWORD'),
+        database: config.get('DB_DATABASE'),
+        entities: [Customer, Order, OrderDetail, Product],
+        synchronize: true,
+      }),
     }),
     TypeOrmModule.forFeature([Customer, Order, OrderDetail, Product]),
     OrdersModule,
@@ -66,4 +80,8 @@ import { APP_GUARD } from '@nestjs/core';
   ],
   exports: [CustomersService, OrdersModule, OrderDetailModule, ProductsModule],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

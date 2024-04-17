@@ -10,7 +10,7 @@ services:
       KC_DATABASE: customer
       KC_DB_USERNAME: postgres
       KC_DB_PASSWORD: postgres
-      KC_DB_HOST: postgres
+      KC_DB_HOST: postgres_db
     command: start-dev
     ports:
       - 8080:8080
@@ -19,18 +19,6 @@ services:
     depends_on:
       - postgres
 
-  web:
-      build: .
-      ports:
-        - "3000:3000"
-      environment:
-        - DATABASE_HOST=postgres
-        - DATABASE_USER=postgres
-        - DATABASE_PASSWORD=postgres
-        - DATABASE_NAME=postgres
-        - DATABASE_PORT=5432
-      depends_on:
-        - postgres
   postgres:
     image: postgres:13
     container_name: postgres_db
@@ -42,6 +30,7 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
 volumes:
   postgres_data:
   keycloak-data:

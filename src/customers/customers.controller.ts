@@ -3,14 +3,12 @@ import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/CreateCustomerDto';
 import { Roles } from 'nest-keycloak-connect';
-import { ApiBearerAuth } from '@nestjs/swagger';
 //localhost:3000/customers/
 @Controller('customers')
 export class CustomersController {
   constructor(private customersService: CustomersService) {}
 
   @Get()
-
   getAllCustomers(): Promise<Array<Customer>> {
     return this.customersService.getAllCustomers();
   }
