@@ -1,11 +1,12 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
+  private readonly logger = new Logger('loggerMiddleware');
   use(req: any, res: any, next: () => void) {
-    console.log('Request...', new Date().toDateString());
-    console.log('deneme');
-    console.log('req and url: ', req.method, req.url);
+    this.logger.log('Request...', new Date().toDateString());
+
+    this.logger.log('req and url: ', req.method, req.url);
 
     next();
   }
